@@ -2,32 +2,20 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, InputGroup, Alert } from 'react-native';
 import AWS from 'aws-sdk';
 
-const CONFIG_URL = 'https://s3.amazonaws.com/lunch-decider/lunch-places-1.json';
+const CONFIG_URL = 'https://s3.amazonaws.com/lunch-decider/lunch-decider.json';
 
 export default class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      places: [],
+      places: [
+        'to eat at Hasia today',
+        'to order Asian',
+        'to eat burritos at Condessa',
+        'to go to Leonardi'
+    ],
       text: ''
     }
-  }
-
-  componentDidMount() {
-     this.fetchPlaces();
-  }
-
-  fetchPlaces() {
-    fetch(CONFIG_URL)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        places: responseJson.places
-      });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
 
   onAddPress = () => {
@@ -50,30 +38,44 @@ export default class App extends React.Component {
     })
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        console.log('Success');
-        console.log(response);
-        Alert.alert('Uploaded...');
+        Alert.alert('Updated...');
       } else {
-        console.log('Fail');
-        console.log(response);
-        Alert.alert('Upload failed.');
+        Alert.alert('Update failed.');
       }
     })
     .catch((error) => {
-      console.log('Error');
-      console.log(response);
       Alert.alert(error);
     });
   }
 
+  onDeletePress(place) {
+    var array = this.state.places;
+    var index = array.indexOf(place)
+    array.splice(index, 1);
+    this.setState({places: array });
+  }
+
   render() {
-    const placesList = this.state.places.map(place => <Text key={place} style={{fontSize:20 }}>{place}</Text>);
+    const placesList = this.state.places.map(place => {
+      return (
+        <View key={place} style={{flexDirection:'row', width: window.width, margin: 0, justifyContent:'center', alignItems: 'flex-start'}}>
+          <View style={{flex:4}}>
+            <Text style={{fontSize:20}}>{place}</Text>
+          </View>
+          <View style={{flex:1}}>
+            <Button
+              onPress={() => this.onDeletePress(place)}
+              title="Delete"
+              color="red"
+            />
+          </View>
+        </View>
+      );
+    });
 
     return (
       <View style={styles.container}>
-        <View>
-          {placesList}
-        </View>
+        {placesList}
         <View style={{flexDirection:'row', width: window.width, margin: 0, justifyContent:'center', alignItems: 'flex-start'}}>
           <View style={{flex:4}}>
             <TextInput
@@ -93,7 +95,7 @@ export default class App extends React.Component {
         <View style={{alignItems: 'flex-end'}}>
           <Button
             onPress={this.onSavePress}
-            title="Save"
+            title="Update"
             color="#841584"
           />
         </View>
