@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "lunch-decider-app",
-    "description": "An empty new project",
+    "description": "Lunch decider configuration tool",
     "slug": "lunch-decider-app",
     "privacy": "public",
     "sdkVersion": "20.0.0",

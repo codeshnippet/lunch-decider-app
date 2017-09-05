@@ -88,7 +88,7 @@ export default class App extends React.Component {
             <Button
               onPress={this.onAddPress}
               title="Add"
-              color="#841584"
+              color="blue"
             />
           </View>
         </View>
@@ -96,7 +96,7 @@ export default class App extends React.Component {
           <Button
             onPress={this.onSavePress}
             title="Update"
-            color="#841584"
+            color="green"
           />
         </View>
       </View>
